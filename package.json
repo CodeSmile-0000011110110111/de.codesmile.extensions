@@ -13,8 +13,5 @@
   "changelogUrl": "https://github.com/CodeSmile-0000011110110111/de.codesmile.extensions",
   "documentationUrl": "https://github.com/CodeSmile-0000011110110111/de.codesmile.extensions",
   "licensesUrl": "https://github.com/CodeSmile-0000011110110111/de.codesmile.extensions",
-  "dependencies": {
-    "com.unity.test-framework": "1.4.1"
-  },
   "relatedPackages": {}
 }
