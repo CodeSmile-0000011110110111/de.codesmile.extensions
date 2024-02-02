@@ -1,25 +1,28 @@
-﻿// Copyright (C) 2021-2023 Steffen Itterheim
+﻿// Copyright (C) 2021-2024 Steffen Itterheim
 // Refer to included LICENSE file for terms and conditions.
 
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace CodeSmile.Extensions
+namespace CodeSmile
 {
 	/// <summary>
-	/// UnityEngine.Object extension methods
+	///     UnityEngine.Object extension methods
 	/// </summary>
 	public static class ObjectExt
 	{
 		/// <summary>
-		///     Destroys the object regardless of Edit or Play mode.
+		///     Destroys the object regardless of Edit or Play mode by calling either
+		///		DestroyImmediate or Destroy depending on Application.isPlaying.
 		/// </summary>
 		/// <remarks>
-		///     Depending on editor vs play mode it calls either DestroyImmediate or Destroy.
-		///		In Builds it directly calls Destroy.
+		///     In Builds it compiles to a direct, inlined call to Object.Destroy() so there
+		///     is no condition test and no loss of performance.
 		/// </remarks>
 		/// <param name="self"></param>
 #if UNITY_EDITOR
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void DestroyInAnyMode(this Object self)
 		{
 			if (Application.isPlaying == false)
@@ -28,6 +31,7 @@ namespace CodeSmile.Extensions
 				Object.Destroy(self);
 		}
 #else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void DestroyInAnyMode(this Object self) => Object.Destroy(self);
 #endif
 	}

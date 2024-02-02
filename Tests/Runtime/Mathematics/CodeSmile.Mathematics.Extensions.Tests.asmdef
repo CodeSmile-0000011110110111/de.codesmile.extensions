@@ -1,0 +1,24 @@
+{
+    "name": "CodeSmile.Mathematics.Extensions.Tests",
+    "rootNamespace": "CodeSmile.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "Unity.PerformanceTesting",
+        "CodeSmile.Mathematics.Extensions",
+        "Unity.Mathematics",
+        "Unity.Mathematics.Extensions"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
