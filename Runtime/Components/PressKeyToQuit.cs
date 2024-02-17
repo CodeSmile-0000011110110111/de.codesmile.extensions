@@ -14,14 +14,27 @@ namespace CodeSmile.Components
 	/// </summary>
 	internal class PressKeyToQuit : MonoBehaviour
 	{
-		// [Tooltip("The modifiers must be held for the QuitKey to be registered.")]
-		// public KeyCode Modifier = KeyCode.LeftControl;
-
-		[Tooltip("The key that will quit if the Modifiers are also held down.")]
+		[Tooltip("The key that will quit if Ctrl+Alt / Cmd+Option are also held down.")]
 		public KeyCode QuitKey = KeyCode.Escape;
+
+		private void Awake()
+		{
+#if UNITY_EDITOR || !(UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX)
+			Destroy(gameObject);
+#endif
+		}
 
 		private void Update()
 		{
+			var alt = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+			if (!alt)
+				return;
+
+			var cmd = Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
+			var ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+			if (!cmd && !ctrl)
+				return;
+
 			if (Input.GetKeyDown(QuitKey))
 				Application.Quit();
 		}

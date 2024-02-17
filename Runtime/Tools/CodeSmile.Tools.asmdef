@@ -1,8 +1,8 @@
 {
-    "name": "CodeSmile.Components",
-    "rootNamespace": "CodeSmile.Components",
+    "name": "CodeSmile.Tools",
+    "rootNamespace": "CodeSmile.Tools",
     "references": [
-    "GUID:ff210dc63eba436aa09344401bf11438"],
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -1,6 +1,7 @@
 // Copyright (C) 2021-2024 Steffen Itterheim
 // Refer to included LICENSE file for terms and conditions.
 
+using CodeSmile.Tests.Tools.Attributes;
 using CodeSmile.TestTools;
 using NUnit.Framework;
 using System.Collections;
@@ -11,7 +12,8 @@ namespace CodeSmile.Tests
 {
 	public class ObjectExtTests
 	{
-		[UnityTest] public IEnumerator DestroyInAnyMode_DestroysTheGameObject()
+		[UnityTest][CreateDefaultScene]
+		public IEnumerator DestroyInAnyMode_DestroysTheGameObject()
 		{
 			var parent = Helper.CreateGameObjectWithChildren(0);
 

@@ -1,6 +1,7 @@
 // Copyright (C) 2021-2024 Steffen Itterheim
 // Refer to included LICENSE file for terms and conditions.
 
+using CodeSmile.Tests.Tools.Attributes;
 using CodeSmile.TestTools;
 using NUnit.Framework;
 using System.Collections;
@@ -11,7 +12,8 @@ namespace CodeSmile.Tests
 {
 	public class TransformExtTests
 	{
-		[UnityTest] public IEnumerator DestroyAllChildren_NoChildren_DoesNotThrow()
+		[UnityTest, CreateDefaultScene]
+		public IEnumerator DestroyAllChildren_NoChildren_DoesNotThrow()
 		{
 			var parent = Helper.CreateGameObjectWithChildren(0);
 
@@ -21,7 +23,8 @@ namespace CodeSmile.Tests
 			Assert.AreEqual(0, parent.transform.childCount);
 		}
 
-		[UnityTest] public IEnumerator DestroyAllChildren_OneChildren_NoChildrenRemain()
+		[UnityTest, CreateDefaultScene]
+		public IEnumerator DestroyAllChildren_OneChildren_NoChildrenRemain()
 		{
 			var parent = Helper.CreateGameObjectWithChildren(1);
 
@@ -31,7 +34,8 @@ namespace CodeSmile.Tests
 			Assert.AreEqual(0, parent.transform.childCount);
 		}
 
-		[UnityTest] public IEnumerator DestroyAllChildren_ManyChildren_NoChildrenRemain()
+		[UnityTest, CreateDefaultScene]
+		public IEnumerator DestroyAllChildren_ManyChildren_NoChildrenRemain()
 		{
 			var parent = Helper.CreateGameObjectWithChildren(11);
 
@@ -41,7 +45,8 @@ namespace CodeSmile.Tests
 			Assert.AreEqual(0, parent.transform.childCount);
 		}
 
-		[UnityTest] public IEnumerator DestroyInAnyMode_DestroysTheGameObject()
+		[UnityTest, CreateDefaultScene]
+		public IEnumerator DestroyInAnyMode_DestroysTheGameObject()
 		{
 			var parent = Helper.CreateGameObjectWithChildren(0);
 
