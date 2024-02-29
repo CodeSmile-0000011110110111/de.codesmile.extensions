@@ -15,7 +15,7 @@ namespace CodeSmile.Components
 			{
 				if (s_Instance == null)
 				{
-					var go = new GameObject($"{nameof(T)}", typeof(T));
+					var go = new GameObject($"{typeof(T)}", typeof(T));
 					s_Instance = go.GetComponent<T>();
 					Debug.Log($"Instance is: {s_Instance}");
 				}
