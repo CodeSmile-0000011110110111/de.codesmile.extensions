@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CodeSmile.Components
 {
 	[RequireComponent(typeof(ParticleSystem))]
-	public class AutoDestroyParticleSystem : MonoBehaviour
+	internal class AutoDestroyParticleSystem : MonoBehaviour
 	{
 		private void OnEnable() => Destroy(gameObject, GetComponent<ParticleSystem>().main.duration);
 	}

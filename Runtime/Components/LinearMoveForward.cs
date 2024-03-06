@@ -10,7 +10,7 @@ namespace CodeSmile.Components
 	{
 		[SerializeField] private Single m_SpeedInUnitsPerSecond = 1f;
 
-		private void Update()
+		private void FixedUpdate()
 		{
 			var frameSpeed = m_SpeedInUnitsPerSecond * Time.deltaTime;
 			var velocity = transform.forward * frameSpeed;
