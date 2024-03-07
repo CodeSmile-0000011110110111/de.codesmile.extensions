@@ -8,13 +8,21 @@ namespace CodeSmile.Components
 {
 	public class LinearMoveForward : MonoBehaviour
 	{
-		[SerializeField] private Single m_SpeedInUnitsPerSecond = 1f;
+		[SerializeField] private Single m_UnitsPerSecond = 1f;
 
-		private void FixedUpdate()
+		private Single m_UnitsPerTick;
+		private Vector3 m_Velocity;
+
+		public Single UnitsPerSecond => m_UnitsPerSecond;
+		public Single UnitsPerTick => m_UnitsPerTick;
+		public Vector3 Velocity => m_Velocity;
+
+		private void Start()
 		{
-			var frameSpeed = m_SpeedInUnitsPerSecond * Time.deltaTime;
-			var velocity = transform.forward * frameSpeed;
-			transform.localPosition += velocity;
+			m_UnitsPerTick = m_UnitsPerSecond * Time.fixedDeltaTime;
+			m_Velocity = transform.forward * m_UnitsPerTick;
 		}
+
+		private void FixedUpdate() => transform.localPosition += m_Velocity;
 	}
 }
