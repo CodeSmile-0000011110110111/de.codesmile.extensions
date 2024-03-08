@@ -1,13 +1,13 @@
 ﻿// Copyright (C) 2021-2024 Steffen Itterheim
 // Refer to included LICENSE file for terms and conditions.
 
-using CodeSmile.Tools;
+using CodeSmile.Components;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace CodeSmile.Components
+namespace CodeSmile.SceneTools
 {
 	public class SceneAutoLoader : OneTimeTaskBehaviour
 	{

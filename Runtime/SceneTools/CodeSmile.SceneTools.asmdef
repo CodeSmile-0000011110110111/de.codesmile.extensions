@@ -1,7 +1,8 @@
 {
-    "name": "CodeSmile.Tools",
-    "rootNamespace": "CodeSmile.Tools",
+    "name": "CodeSmile.SceneTools",
+    "rootNamespace": "CodeSmile.SceneTools",
     "references": [
+        "GUID:e24f30608cf04354be70b7062aa0ad2b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
