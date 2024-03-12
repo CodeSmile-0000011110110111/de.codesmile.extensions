@@ -16,7 +16,14 @@ namespace CodeSmile.SceneTools
 #if UNITY_EDITOR
 			var runtimeLoad = AutoLoadScenes.Instance;
 			if (runtimeLoad != null)
-				runtimeLoad.AddScene(gameObject.scene);
+			{
+				if (enabled && gameObject.activeInHierarchy)
+					runtimeLoad.AddScene(gameObject.scene);
+				else
+				{
+					runtimeLoad.RemoveScene(gameObject.scene);
+				}
+			}
 #endif
 		}
 	}

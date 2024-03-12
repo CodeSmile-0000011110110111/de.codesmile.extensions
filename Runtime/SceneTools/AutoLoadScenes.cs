@@ -1,11 +1,14 @@
 // Copyright (C) 2021-2024 Steffen Itterheim
 // Refer to included LICENSE file for terms and conditions.
 
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using System.Linq;
+using UnityEditor;
+#endif
 
 namespace CodeSmile.SceneTools
 {
@@ -25,9 +28,21 @@ namespace CodeSmile.SceneTools
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 		private static void RuntimeInit_AdditiveLoadScenes()
 		{
-			foreach (var sceneRef in Instance.AdditiveScenes)
-				SceneManager.LoadScene(sceneRef.SceneName, LoadSceneMode.Additive);
+			var scenes = Instance?.AdditiveScenes;
+			if (scenes == null)
+				return;
+
+			foreach (var sceneRef in scenes)
+			{
+				if (sceneRef != null && String.IsNullOrEmpty(sceneRef.SceneName) == false)
+					SceneManager.LoadScene(sceneRef.SceneName, LoadSceneMode.Additive);
+			}
 		}
+
+#if UNITY_EDITOR
+		private static SceneReference GetSceneReference(Scene scene) =>
+			new(AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path));
+#endif
 
 		private void OnValidate() => ValidateSceneReferences();
 
@@ -56,9 +71,15 @@ namespace CodeSmile.SceneTools
 		public void AddScene(Scene scene)
 		{
 #if UNITY_EDITOR
-			var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path);
-			m_AdditiveScenes.Add(new SceneReference(sceneAsset));
+			m_AdditiveScenes.Add(GetSceneReference(scene));
+			ValidateSceneReferences();
+#endif
+		}
 
+		public void RemoveScene(Scene scene)
+		{
+#if UNITY_EDITOR
+			m_AdditiveScenes.Remove(GetSceneReference(scene));
 			ValidateSceneReferences();
 #endif
 		}
