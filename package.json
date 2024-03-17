@@ -2,7 +2,7 @@
   "name": "de.codesmile.extensions",
   "displayName": "CodeSmile Extensions",
   "description": "Unity package with commonly used C# extension and utility methods.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "unity": "2021.3",
   "unityRelease": "3f1",
   "author": {

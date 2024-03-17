@@ -52,7 +52,7 @@ namespace CodeSmile.SceneTools
 
 		public void LoadSceneInternal()
 		{
-			Debug.Log($"{nameof(SceneAutoLoader)}: loading {m_SceneToLoad.SceneName}");
+			//Debug.Log($"{nameof(SceneAutoLoader)}: loading {m_SceneToLoad.SceneName}");
 			SceneManager.LoadScene(m_SceneToLoad.SceneName, LoadSceneMode.Single);
 			StopAllCoroutines();
 			TaskPerformed();
