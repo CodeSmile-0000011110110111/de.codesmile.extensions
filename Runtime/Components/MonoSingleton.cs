@@ -2,6 +2,7 @@
 // Refer to included LICENSE file for terms and conditions.
 
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace CodeSmile.Components
@@ -12,13 +13,13 @@ namespace CodeSmile.Components
 	/// </summary>
 	/// <example>
 	///     Create a singleton instance by subclassing:
-	///     `public class ThereCanBeOnlyOneBehaviour : MonoSingleton&lt;ThereCanBeOnlyOneBehaviour&gt; {}`
+	///     `public class MySingleton : MonoSingleton&lt;MySingleton&gt; {}`
 	/// </example>
 	/// <remarks>
 	///     This singleton can be used in two ways:
 	///     1) Classic: add singleton component to a GameObject in prefab or scene. Then override Awake and either call
 	///     base.Awake() or SetSingletonInstance(this).
-	///     2) Auto-Create: do NOT add the T component to any GameObject! The first time T.Singleton is accessed, a new
+	///     2) Auto-Create: do NOT add the singleton component to a GameObject! The first time T.Singleton is accessed, a new
 	///     GameObject with the T component gets created automatically.
 	///     NOTE: in BOTH cases the singleton's GameObject gets marked as DontDestroyOnLoad(instance) to guarantee it persists
 	///     throughout scene changes. Keep this in mind when adding additional components to the same GameObject (prefer not
@@ -42,7 +43,6 @@ namespace CodeSmile.Components
 	{
 		private static T s_Instance;
 		private static Boolean s_IsInstanceAssigned;
-		private static Boolean s_IsApplicationQuitting;
 
 		/// <summary>
 		///     Access the Singleton instance.
@@ -57,11 +57,8 @@ namespace CodeSmile.Components
 			{
 				if (s_IsInstanceAssigned == false)
 				{
-					// assigned flag must be set before AutoCreateInstance because
-					// new GameObject(..) will run Awake before returning the instance
-					s_IsInstanceAssigned = true;
-
-					SetSingletonInstanceNoSafetyChecks(AutoCreateInstance());
+					var instance = AutoCreateInstance();
+					SetSingletonInstance(instance);
 				}
 
 				return s_Instance;
@@ -76,47 +73,20 @@ namespace CodeSmile.Components
 		///     Prefer to call base.Awake() over manually calling SetSingletonInstance(this).
 		/// </remarks>
 		/// <param name="instance"></param>
-		/// <exception cref="InvalidOperationException">
-		///     Thrown if the singleton instance was already assigned.
-		///     If you get this, make sure you implement Awake() and call base.Awake() or SetSingletonInstance()
-		///     before any script accesses the Singleton property.
-		/// </exception>
 		/// <exception cref="ArgumentNullException">
-		///     The instance you passed is null. The singleton instance cannot be set
-		///     to null once assigned. This is by design.
+		///     The instance parameter is null. The singleton cannot be set to null. This is by design.
 		/// </exception>
 		protected static void SetSingletonInstance(T instance)
 		{
-			if (s_IsInstanceAssigned)
-				throw new InvalidOperationException($"{nameof(MonoSingleton<T>)} already instantiated!");
 			if (instance == null)
 				throw new ArgumentNullException("instance must not be null");
 
-			SetSingletonInstanceNoSafetyChecks(instance);
-		}
-
-		private static void SetSingletonInstanceNoSafetyChecks(T instance)
-		{
-			s_IsInstanceAssigned = true;
 			s_Instance = instance;
-			DontDestroyOnLoad(s_Instance);
+			s_IsInstanceAssigned = true;
 		}
 
 		private static T AutoCreateInstance() =>
 			new GameObject($"{typeof(T).Name} (Auto-Created)", typeof(T)).GetComponent<T>();
-
-		private static void CheckDestroyWithoutQuit()
-		{
-#if DEBUG
-			if (s_IsApplicationQuitting == false)
-			{
-				throw new InvalidOperationException("Attempted to destroy a MonoSingleton<T> object! " +
-				                                    "This is not allowed. Once instantiated, a MonoSingleton must remain " +
-				                                    "instantiated until the Application quits. To perform any cleanup, " +
-				                                    "hook into appropriate events such as scene load or network shutdown.");
-			}
-#endif
-		}
 
 		/// <summary>
 		///     Call base.Awake() to automatically assign 'this' as the singleton instance.
@@ -124,8 +94,19 @@ namespace CodeSmile.Components
 		/// </summary>
 		protected virtual void Awake()
 		{
-			if (s_IsInstanceAssigned == false)
-				SetSingletonInstance(this as T);
+			if (s_IsInstanceAssigned)
+				throw new InvalidOperationException($"{nameof(MonoSingleton<T>)} already instantiated!");
+
+			SetSingletonInstance(this as T);
+		}
+
+		// must defer DDoL to Start to allow possible  Multiplayer Roles stripping during Awake
+		protected virtual void Start()
+		{
+			Components.DontDestroyOnLoad.Apply(gameObject);
+#if DEBUG
+			EnableCheckDestroyWithoutQuitCheck();
+#endif
 		}
 
 		/// <summary>
@@ -134,15 +115,37 @@ namespace CodeSmile.Components
 		/// </summary>
 		protected virtual void OnDestroy()
 		{
+#if DEBUG
 			CheckDestroyWithoutQuit();
+#endif
 
-			s_IsInstanceAssigned = false;
 			s_Instance = null;
+			s_IsInstanceAssigned = false;
 		}
 
 		/// <summary>
 		///     CAUTION: you must call base.OnApplicationQuit() when overriding this method!
 		/// </summary>
-		protected virtual void OnApplicationQuit() => s_IsApplicationQuitting = true;
+		protected virtual void OnApplicationQuit()
+		{
+#if DEBUG
+			DisableCheckDestroyWithoutQuitCheck();
+#endif
+		}
+
+#if DEBUG
+		private static Boolean s_IsApplicationQuitting = true; // start true to allow for component stripping during Awake()
+		private static void EnableCheckDestroyWithoutQuitCheck() => s_IsApplicationQuitting = false;
+		private static void DisableCheckDestroyWithoutQuitCheck() => s_IsApplicationQuitting = true;
+		private static void CheckDestroyWithoutQuit()
+		{
+			if (s_IsApplicationQuitting == false)
+			{
+				throw new InvalidOperationException("Destroy() on MonoSingleton<T> instance disallowed! " +
+				                                    "MonoSingleton must remain instantiated until Application quits. " +
+				                                    "To perform cleanup use appropriate event handlers (eg scene load).");
+			}
+		}
+#endif
 	}
 }

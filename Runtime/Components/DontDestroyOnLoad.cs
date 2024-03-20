@@ -7,10 +7,23 @@ namespace CodeSmile.Components
 {
 	public class DontDestroyOnLoad : MonoBehaviour
 	{
-		private void Awake()
+		// deferred to Start rather than Awake to allow Multiplayer Roles to possibly strip components during Awake
+		// because this script moves the object to the root and Multiplayer Roles won't strip root objects
+		private void Start()
 		{
 			if (enabled)
-				DontDestroyOnLoad(gameObject);
+			{
+				Apply(gameObject);
+				Destroy(this);
+			}
+		}
+
+		public static void Apply(GameObject go)
+		{
+			// DDoL only works on root game objects
+			go.transform.parent = null;
+
+			DontDestroyOnLoad(go);
 		}
 	}
 }
