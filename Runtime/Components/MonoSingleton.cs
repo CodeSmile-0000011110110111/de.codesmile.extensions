@@ -39,7 +39,7 @@ namespace CodeSmile.Components
 	///     cleanup, do so by hooking into appropriate event methods such as scene load or network shutdown.
 	/// </remarks>
 	/// <typeparam name="T"></typeparam>
-	public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+	public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
 	{
 		private static T s_Instance;
 		private static Boolean s_IsInstanceAssigned;
@@ -94,8 +94,8 @@ namespace CodeSmile.Components
 		/// </summary>
 		protected virtual void Awake()
 		{
-			if (s_IsInstanceAssigned)
-				throw new InvalidOperationException($"{nameof(MonoSingleton<T>)} already instantiated!");
+			if (s_Instance != null)
+				throw new InvalidOperationException($"{nameof(MonoSingleton<T>)}<{typeof(T).Name}> already instantiated!");
 
 			SetSingletonInstance(this as T);
 		}

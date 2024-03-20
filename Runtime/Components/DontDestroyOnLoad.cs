@@ -24,6 +24,7 @@ namespace CodeSmile.Components
 			go.transform.parent = null;
 
 			DontDestroyOnLoad(go);
+			//Debug.Log($"DontDestroyOnLoad: {go.name} (scene: {go.scene.name})");
 		}
 	}
 }
