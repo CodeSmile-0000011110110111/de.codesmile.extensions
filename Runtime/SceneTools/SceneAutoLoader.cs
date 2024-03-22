@@ -4,6 +4,7 @@
 using CodeSmile.Components;
 using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,15 +17,23 @@ namespace CodeSmile.SceneTools
 
 		public static void DestroyAll()
 		{
+#if UNITY_2022_3_OR_NEWER
 			foreach (var loader in FindObjectsByType<SceneAutoLoader>(FindObjectsSortMode.None))
 				loader.Disable();
+#else
+			throw new NotSupportedException("not available in this Unity version");
+#endif
 		}
 
 		public static void LoadScene()
 		{
+#if UNITY_2022_3_OR_NEWER
 			var loader = FindAnyObjectByType<SceneAutoLoader>();
 			if (loader != null)
 				loader.LoadSceneInternal();
+#else
+			throw new NotSupportedException("not available in this Unity version");
+#endif
 		}
 
 		private void OnValidate()
