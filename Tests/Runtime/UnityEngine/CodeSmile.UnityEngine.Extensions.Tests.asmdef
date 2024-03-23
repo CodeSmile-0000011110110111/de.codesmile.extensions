@@ -3,9 +3,7 @@
     "rootNamespace": "CodeSmile.Tests",
     "references": [
         "UnityEngine.TestRunner",
-        "Unity.PerformanceTesting",
-        "CodeSmile.UnityEngine.Extensions",
-        "CodeSmile.TestTools"
+        "CodeSmile.UnityEngine.Extensions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
