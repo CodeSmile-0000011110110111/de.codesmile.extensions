@@ -15,6 +15,7 @@
   "licensesUrl": "https://github.com/CodeSmile-0000011110110111/de.codesmile.extensions",
   "relatedPackages": {},
   "dependencies": {
+    "de.codesmile.testtools": "1.1.1",
     "com.unity.test-framework": "1.4.1"
   }
 }
