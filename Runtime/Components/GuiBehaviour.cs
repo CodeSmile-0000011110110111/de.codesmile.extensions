@@ -11,6 +11,10 @@ namespace CodeSmile.MultiPal.GUI.Base
 {
 	public class GuiBehaviour : MonoBehaviour
 	{
+		private const String PanelContentRootName = "panel-content";
+
+		[SerializeField] private VisualTreeAsset m_ContentSourceAsset;
+
 		protected UIDocument m_Document;
 		protected VisualElement m_Root;
 
@@ -18,6 +22,12 @@ namespace CodeSmile.MultiPal.GUI.Base
 		{
 			m_Document = GetComponent<UIDocument>();
 			m_Root = m_Document.rootVisualElement;
+
+			if (m_ContentSourceAsset != null)
+			{
+				var contentRoot = FindFirst<VisualElement>(PanelContentRootName);
+				m_ContentSourceAsset.CloneTree(contentRoot);
+			}
 
 			OnRegisterEvents();
 			OnShowGUI();
