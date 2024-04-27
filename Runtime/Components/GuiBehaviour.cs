@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace CodeSmile.MultiPal.GUI.Base
+namespace CodeSmile.Components
 {
 	public class GuiBehaviour : MonoBehaviour
 	{
