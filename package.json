@@ -16,6 +16,7 @@
   "relatedPackages": {},
   "dependencies": {
     "de.codesmile.testtools": "1.1.1",
-    "com.unity.test-framework": "1.4.1"
+    "com.unity.test-framework": "1.4.1",
+    "com.unity.editorcoroutines": "1.0.0"
   }
 }
